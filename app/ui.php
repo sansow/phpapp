@@ -1,7 +1,7 @@
 <?php
 /** Shared layout: header with nav + footer. Keeps the demo pages consistent. */
 function page_top(string $title, string $active): void {
-    $pages = ['index.php' => 'Dashboard', 'visits.php' => 'Visits', 'about.php' => 'About'];
+    $pages = ['index.php' => 'Dashboard', 'guide.php' => 'Guide', 'visits.php' => 'Visits', 'about.php' => 'About'];
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +34,21 @@ function page_top(string $title, string $active): void {
   th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid rgba(128,128,128,.25); }
   th { text-transform: uppercase; font-size: .75rem; letter-spacing: .05em; opacity: .7; }
   footer { text-align: center; font-size: .8rem; opacity: .6; margin: 2rem 0; }
+  /* rendered guide markdown */
+  .guide-doc h1 { font-size: 1.45rem; margin-top: 0; }
+  .guide-doc h2 { font-size: 1.15rem; text-transform: none; letter-spacing: 0; opacity: 1;
+                  margin-top: 1.6rem; border-bottom: 1px solid rgba(128,128,128,.25); padding-bottom: .3rem; }
+  .guide-doc pre { background: #151515; color: #e8e8e8; padding: 1rem; border-radius: 8px;
+                   overflow-x: auto; font-size: .88rem; line-height: 1.45; }
+  .guide-doc pre code { background: none; padding: 0; color: inherit; }
+  .guide-doc blockquote { border-left: 4px solid #ee0000; margin: 1rem 0; padding: .3rem 1rem;
+                          background: rgba(238,0,0,.06); border-radius: 0 6px 6px 0; }
+  .guide-doc table { margin: 1rem 0; }
+  .guide-doc a { color: #ee0000; }
+  .copy-btn { position: absolute; top: .5rem; right: .5rem; background: rgba(255,255,255,.12);
+              color: #fff; border: 1px solid rgba(255,255,255,.25); border-radius: 6px;
+              padding: .25rem .7rem; font-size: .75rem; cursor: pointer; }
+  .copy-btn:hover { background: rgba(255,255,255,.25); }
 </style>
 </head>
 <body>

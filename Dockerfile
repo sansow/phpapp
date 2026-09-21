@@ -14,9 +14,11 @@ RUN curl -sSL -o /etc/yum.repos.d/mssql-release.repo https://packages.microsoft.
     echo "extension=pdo_sqlsrv.so" > /etc/php.d/35-pdo_sqlsrv.ini && \
     dnf remove -y gcc gcc-c++ make && dnf clean all
 
-# App source into the S2I app root; fix ownership for arbitrary-UID runtime
+# App source into the S2I app root, docs alongside it (guide.php renders them);
+# fix ownership for arbitrary-UID runtime
 COPY app/ /opt/app-root/src/
-RUN chown -R 1001:0 /opt/app-root/src && chmod -R g+rw /opt/app-root/src
+COPY docs/ /opt/app-root/docs/
+RUN chown -R 1001:0 /opt/app-root/src /opt/app-root/docs && chmod -R g+rw /opt/app-root/src /opt/app-root/docs
 
 USER 1001
 # No EXPOSE here — the base image already declares 8080; repeating it makes

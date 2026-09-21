@@ -19,6 +19,8 @@ This repo has a `Dockerfile` at the root, so OpenShift's **Import from Git** aut
 
 Watch **Workloads → Topology**: the build badge spins, then the pod goes dark blue (running). Click the route arrow icon to open the app — you should see the dashboard with the pod name and "SQL Server: not configured".
 
+The app has three pages plus the probe endpoints: **Dashboard** (`/`), **Visits** (`/visits.php` — reads the visit log from SQL Server after Module 1.8), and **About** (`/about.php` — shows the env vars OpenShift injects, with the DB password masked; a nice visual for the config-from-Secrets story).
+
 ## CLI equivalent
 
 ```bash

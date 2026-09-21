@@ -37,6 +37,12 @@ page_top('Dashboard', 'index.php');
 </div>
 
 <div class="card">
+  <h2>Workshop guide</h2>
+  <p>New to OpenShift? The full getting-started walkthrough — users, Git, registries, probes,
+     stateful workloads, SQL Server, CI/CD — is built into this app: <a href="/guide.php"><strong>open the Guide</strong></a>.</p>
+</div>
+
+<div class="card">
   <h2>Probes</h2>
   <p><code>/healthz.php</code> (liveness) · <code>/readyz.php</code> (readiness<?= strtolower((string) getenv('DB_REQUIRED')) === 'true' ? ', gated on the DB' : '' ?>) — open them directly to see exactly what the kubelet polls.</p>
 </div>
