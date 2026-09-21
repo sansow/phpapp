@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: php-demo
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/<your-org>/ocp-getting-started.git   # update to your fork
+    targetRevision: main
+    path: manifests
+    directory:
+      recurse: true          # picks up php-app/, mongodb/, sqlserver/
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: getting-started
+  syncPolicy:
+    automated:
+      prune: true            # objects removed from Git get removed from cluster
+      selfHeal: true         # manual drift is reverted
+    syncOptions:
+    - CreateNamespace=false

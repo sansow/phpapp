@@ -1,0 +1,56 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: php-app-pipeline
+spec:
+  params:
+  - name: git-url
+    type: string
+  - name: git-revision
+    type: string
+    default: main
+  - name: image
+    type: string
+    default: image-registry.openshift-image-registry.svc:5000/getting-started/php-app:latest
+  workspaces:
+  - name: shared-workspace
+  tasks:
+  - name: fetch-source
+    taskRef:
+      resolver: cluster
+      params:
+      - { name: kind, value: task }
+      - { name: name, value: git-clone }
+      - { name: namespace, value: openshift-pipelines }
+    params:
+    - { name: URL, value: $(params.git-url) }
+    - { name: REVISION, value: $(params.git-revision) }
+    workspaces:
+    - name: output
+      workspace: shared-workspace
+  - name: build-image
+    runAfter: [fetch-source]
+    taskRef:
+      resolver: cluster
+      params:
+      - { name: kind, value: task }
+      - { name: name, value: buildah }
+      - { name: namespace, value: openshift-pipelines }
+    params:
+    - { name: IMAGE, value: $(params.image) }
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+  - name: deploy
+    runAfter: [build-image]
+    taskRef:
+      resolver: cluster
+      params:
+      - { name: kind, value: task }
+      - { name: name, value: openshift-client }
+      - { name: namespace, value: openshift-pipelines }
+    params:
+    - name: SCRIPT
+      value: |
+        oc rollout restart deployment/php-app
+        oc rollout status deployment/php-app --timeout=180s

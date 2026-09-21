@@ -1,0 +1,46 @@
+# Declarative version of the php-app Deployment — used by the GitOps module.
+# (Module 1.5 creates the same thing imperatively via Import from Git.)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-app
+  labels: { app: php-app, app.kubernetes.io/part-of: php-demo }
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: php-app }
+  template:
+    metadata:
+      labels: { app: php-app }
+    spec:
+      containers:
+      - name: php-app
+        image: image-registry.openshift-image-registry.svc:5000/getting-started/php-app:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        envFrom:
+        - secretRef:
+            name: php-app-db
+            optional: true       # app runs standalone until Module 1.8
+        env:
+        - name: DB_REQUIRED
+          value: "false"         # flip to "true" once SQL Server is up
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef: { fieldPath: metadata.namespace }
+        resources:
+          requests: { cpu: 100m, memory: 128Mi }
+          limits:   { cpu: 500m, memory: 256Mi }
+        livenessProbe:
+          httpGet: { path: /healthz.php, port: 8080 }
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet: { path: /readyz.php, port: 8080 }
+          periodSeconds: 5
+          failureThreshold: 3
+        startupProbe:
+          httpGet: { path: /healthz.php, port: 8080 }
+          periodSeconds: 5
+          failureThreshold: 30

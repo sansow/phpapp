@@ -1,0 +1,3 @@
+users.htpasswd
+pull-secret.json
+*.local.yaml
