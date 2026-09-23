@@ -18,7 +18,9 @@ page_top('Dashboard', 'index.php');
 <div class="card">
   <h2>Serving pod</h2>
   <div class="big"><?= htmlspecialchars($pod) ?></div>
-  <p>Scale the deployment and refresh — this name changes as the Route load-balances across replicas.</p>
+  <p>Scale the deployment and refresh — this name changes as the Route load-balances across replicas. and </p>
+  <p> annotate the route to disable cookies so haproxy will follow round robin reuest routing
+    oc annotate route phpapp -n samples haproxy.router.openshift.io/disable_cookies=true </p>
 </div>
 
 <div class="card">
